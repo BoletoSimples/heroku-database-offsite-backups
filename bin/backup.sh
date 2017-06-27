@@ -20,9 +20,8 @@ fi
 
 BACKUP_FILE_NAME="$(date +"%Y-%m-%d-%H-%M")-$APP-$DATABASE.dump"
 
-heroku pg:backups capture $DATABASE --app $APP
+heroku pg:backups:capture $DATABASE --app $APP
 curl -o $BACKUP_FILE_NAME `heroku pg:backups:url --app $APP`
 gzip $BACKUP_FILE_NAME
 aws s3 cp $BACKUP_FILE_NAME.gz s3://$S3_BUCKET_PATH/$APP/$DATABASE/$BACKUP_FILE_NAME.gz
 echo "backup $BACKUP_FILE_NAME complete"
-
