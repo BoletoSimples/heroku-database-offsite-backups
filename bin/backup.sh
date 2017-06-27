@@ -19,7 +19,7 @@ if [[ -z "$S3_BUCKET_PATH" ]]; then
 fi
 
 BACKUP_FILE_NAME="$(date +"%Y-%m-%d-%H-%M")-$APP-$DATABASE.dump"
-
+heroku plugins:install heroku-pg-extras
 heroku pg:backups:capture $DATABASE --app $APP
 curl -o $BACKUP_FILE_NAME `heroku pg:backups:url --app $APP`
 gzip $BACKUP_FILE_NAME
