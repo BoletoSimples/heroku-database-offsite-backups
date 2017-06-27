@@ -56,6 +56,12 @@ And add the following command to run as often as you like:
 APP=your-app DATABASE=HEROKU_POSTGRESQL_NAVY_URL /app/bin/backup.sh
 ```
 
+Install heroku-pg-extras if needed:
+
+```
+heroku plugins:install heroku-pg-extras --app=boletosimples-production-bkps
+```
+
 In the above command, APP is the name of your app within heroku that contains the database.  DATABASE is the name of the database you would like to capture and backup.  In our setup, DATABASE actually points to a follower database to avoid any impact to our users.  Both of these environment variables can also be set within your heroku config rather than passing into the script invocation.
 
 
