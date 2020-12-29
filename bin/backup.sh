@@ -89,7 +89,11 @@ for APP in "${ADDR[@]}"; do # access each element of array
   fi
 
   LATEST_FILE_NAME="latest-${APP}.dump"
-  FINAL_FILE_NAME="$(date -jf '%Y-%m-%d %H:%M:%S' "$FINISHED_DATE $FINISHED_TIME" +"%Y-%m-%d_%H-%M_UTC_")${APP}.dump"
+  if [[ `uname` == 'Darwin' ]]; then
+    FINAL_FILE_NAME="$(date -jf '%Y-%m-%d %H:%M:%S' "$FINISHED_DATE $FINISHED_TIME" +"%Y-%m-%d_%H-%M_UTC_")${APP}.dump"
+  else
+    FINAL_FILE_NAME="$(date --date "$FINISHED_DATE $FINISHED_TIME" +"%Y-%m-%d_%H-%M_UTC_")${APP}.dump"
+  fi
 
   echo "Backup file : $FINAL_FILE_NAME"
 
