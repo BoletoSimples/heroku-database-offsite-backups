@@ -53,17 +53,8 @@ if [[ ! -f "backup.key" ]]; then
 fi
 
 if ! type "ccrypt" > /dev/null; then
-  echo "Command ccrypt not found."
-  if [[ `uname` == 'Linux' ]]; then
-    echo "  Installing package ... "
-    apt-get install ccrypt
-  elif [[ `uname` == 'Darwin' ]]; then
-    echo "  Installing package ... "
-    brew install ccrypt
-  else
-    echo "  You have to install this package before continuing."
-    exit 1
-  fi
+  echo "Command ccrypt not found. You have to install this package before continuing."
+  exit 1
 fi
 
 if [[ ! -f "backup.key" ]]; then
