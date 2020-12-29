@@ -121,7 +121,7 @@ for APP in "${ADDR[@]}"; do # access each element of array
   mv $TMP_FILE_NAME $FINAL_FILE_NAME
 
   echo "Uploading $FINAL_FILE_NAME to $TARGET_SERVER_PATH ... "
-  scp -q -i backup.key $FINAL_FILE_NAME $TARGET_SERVER_PATH
+  scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q -i backup.key $FINAL_FILE_NAME $TARGET_SERVER_PATH
 
   echo "Removing $FINAL_FILE_NAME ... "
   rm $FINAL_FILE_NAME
