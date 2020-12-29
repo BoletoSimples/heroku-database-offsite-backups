@@ -59,7 +59,7 @@ fi
 
 if [[ ! -f "backup.key" ]]; then
   echo "Saving SSH key from \$SSH_KEY to backup.key ... "
-  echo $SSH_KEY > backup.key
+  echo "$SSH_KEY" > backup.key
   chmod 600 backup.key
 fi
 
