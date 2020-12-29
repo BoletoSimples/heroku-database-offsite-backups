@@ -1,2 +1,2 @@
 https://github.com/heroku/heroku-buildpack-cli
-https://github.com/Shopify/heroku-buildpack-awscli.git
+https://github.com/heroku/heroku-buildpack-apt
