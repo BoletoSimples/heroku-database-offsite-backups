@@ -97,6 +97,18 @@ for APP in "${ADDR[@]}"; do # access each element of array
 
   echo "Backup file : $FINAL_FILE_NAME"
 
+  echo "Checking if backup already exists ..."
+  IFS=':'
+  read -ra SSH_SPLIT <<< "$TARGET_SERVER_PATH"
+  SSH_SERVER=${SSH_SPLIT[0]}
+  SSH_PATH=${SSH_SPLIT[1]}
+
+  EXISTS=$(ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i backup.key $SSH_SERVER ls $SSH_PATH | grep $FINAL_FILE_NAME | wc -l | tr -d ' ')
+  if [[ $EXISTS == "1" ]]; then
+    echo "  Backup already exists in remote server. Skipping ..."
+    continue
+  fi
+
   if [[ ! -f $LATEST_FILE_NAME ]]; then
     echo "Downloading latest backup of $APP to $LATEST_FILE_NAME ... "
     curl -s -o $LATEST_FILE_NAME `heroku pg:backups:url --app $APP`
