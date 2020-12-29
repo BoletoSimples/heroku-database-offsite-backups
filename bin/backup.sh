@@ -4,8 +4,11 @@
 set -e
 
 date2stamp () {
-    # date --utc --date "$1" +%s
+  if [[ `uname` == 'Darwin' ]]; then
     date -jf '%Y-%m-%d' "$1" '+%s'
+  else
+    date --utc --date "$1" +%s
+  fi
 }
 
 dateDiff (){
