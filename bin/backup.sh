@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Slack from https://github.com/rockymadden/slack-cli
+
 # terminate script as soon as any command fails
 set -e
 
@@ -68,12 +70,17 @@ read -ra SSH_SPLIT <<< "$TARGET_SERVER_PATH"
 SSH_SERVER=${SSH_SPLIT[0]}
 SSH_PATH=${SSH_SPLIT[1]}
 
+BASEDIR=$(dirname "$0")
+
 IFS=',' # space is set as delimiter
 read -ra ADDR <<< "$APPS" # str is read into an array as tokens separated by IFS
 for APP in "${ADDR[@]}"; do # access each element of array
 
   echo "Starting Backup of $APP"
   echo "-----------------------------"
+  if [[ -n "$SLACK_CLI_TOKEN" ]]; then
+    $BASEDIR/slack chat send --text "Starting Backup of $APP" --channel $SLACK_CHANNEL >/dev/null
+  fi
 
   echo "Checking latest backup of $APP ..."
   BACKUP_INFO=$(heroku pg:backups -a $APP)
@@ -89,8 +96,11 @@ for APP in "${ADDR[@]}"; do # access each element of array
   TODAY=$(date '+%Y-%m-%d')
   DIFF=$(dateDiff -d "$FINISHED_DATE" "$TODAY")
   echo "  Last backup was generated at $FINISHED_DATE $FINISHED_TIME"
-  if [[ $DIFF > 2 ]]; then
-    echo "  WARNING! Last backup was generated more than 3 days ago."
+  if [[ $DIFF > 0 ]]; then
+    echo "  WARNING! Last backup of $APP was generated more than 1 day ago."
+    if [[ -n "$SLACK_CLI_TOKEN" ]]; then
+      $BASEDIR/slack chat send --text "*WARNING!* Last backup of $APP was generated more than 3 days ago." --channel "$SLACK_CHANNEL" >/dev/null
+    fi
   fi
 
   LATEST_FILE_NAME="latest-${APP}.dump"
@@ -139,6 +149,9 @@ for APP in "${ADDR[@]}"; do # access each element of array
   rm $FINAL_FILE_NAME
 
   echo "Backup of $APP complete"
+  if [[ -n "$SLACK_CLI_TOKEN" ]]; then
+    $BASEDIR/slack chat send --text "Backup of $APP complete" --channel "$SLACK_CHANNEL" >/dev/null
+  fi
 done
 
 if [[ -f "backup.key" ]]; then
