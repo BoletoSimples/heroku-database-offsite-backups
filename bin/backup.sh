@@ -99,7 +99,7 @@ for APP in "${ADDR[@]}"; do # access each element of array
   if [[ $DIFF > 0 ]]; then
     echo "  WARNING! Last backup of $APP was generated more than 1 day ago."
     if [[ -n "$SLACK_CLI_TOKEN" ]]; then
-      $BASEDIR/slack chat send --text "*WARNING!* Last backup of $APP was generated more than 3 days ago." --channel "$SLACK_CHANNEL" >/dev/null
+      $BASEDIR/slack chat send --text "*WARNING!* Last backup of $APP was generated more than 1 day ago." --channel "$SLACK_CHANNEL" >/dev/null
     fi
   fi
 
