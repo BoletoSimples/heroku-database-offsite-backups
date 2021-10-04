@@ -117,7 +117,7 @@ for APP in "${ADDR[@]}"; do # access each element of array
   echo "Backup file : $FINAL_FILE_NAME"
 
   echo "Checking if backup already exists ..."
-  EXISTS=$(ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i backup.key $SSH_SERVER ls $SSH_PATH | grep $FINAL_FILE_NAME | wc -l | tr -d ' ')
+  EXISTS=$(ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i backup.key -p $TARGET_SERVER_PORT $SSH_SERVER ls $SSH_PATH | grep $FINAL_FILE_NAME | wc -l | tr -d ' ')
   if [[ $EXISTS == "1" ]]; then
     echo "  Backup already exists in remote server. Skipping ..."
     continue
