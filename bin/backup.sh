@@ -40,6 +40,10 @@ if [[ -z "$TARGET_SERVER_PATH" ]]; then
   exit 1
 fi
 
+if [[ -z "$TARGET_SERVER_PORT" ]]; then
+  TARGET_SERVER_PORT=22
+fi
+
 if [[ -z "$NOENCRYPT" ]]; then
   if [[ -z "$ENCRYPTION_KEY" ]]; then
     echo "Missing ENCRYPTION_KEY variable which must be set with the password used to encrypt backup"
@@ -143,7 +147,7 @@ for APP in "${ADDR[@]}"; do # access each element of array
   mv $TMP_FILE_NAME $FINAL_FILE_NAME
 
   echo "Uploading $FINAL_FILE_NAME to $TARGET_SERVER_PATH ... "
-  scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q -i backup.key $FINAL_FILE_NAME $TARGET_SERVER_PATH
+  scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q -i backup.key -P $TARGET_SERVER_PORT $FINAL_FILE_NAME $TARGET_SERVER_PATH
 
   echo "Removing $FINAL_FILE_NAME ... "
   rm $FINAL_FILE_NAME
