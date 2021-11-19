@@ -82,9 +82,9 @@ for APP in "${ADDR[@]}"; do # access each element of array
 
   echo "Starting Backup of $APP"
   echo "-----------------------------"
-  if [[ -n "$SLACK_CLI_TOKEN" ]]; then
-    $BASEDIR/slack chat send --text "Starting Backup of $APP" --channel $SLACK_CHANNEL >/dev/null
-  fi
+  # if [[ -n "$SLACK_CLI_TOKEN" ]]; then
+  #   $BASEDIR/slack chat send --text "Starting Backup of $APP" --channel $SLACK_CHANNEL >/dev/null
+  # fi
 
   echo "Checking latest backup of $APP ..."
   BACKUP_INFO=$(heroku pg:backups -a $APP)
@@ -154,7 +154,7 @@ for APP in "${ADDR[@]}"; do # access each element of array
 
   echo "Backup of $APP complete"
   if [[ -n "$SLACK_CLI_TOKEN" ]]; then
-    $BASEDIR/slack chat send --text "Backup of $APP complete" --channel "$SLACK_CHANNEL" >/dev/null
+    $BASEDIR/slack chat send --text "Backup of `$APP` complete" --channel "$SLACK_CHANNEL" >/dev/null
   fi
 done
 
@@ -167,4 +167,8 @@ if [[ -n "$HEARTBEAT_URL" ]]; then
   echo "Sending a request to the specified HEARTBEAT_URL that the backup was created"
   curl $HEARTBEAT_URL
   echo "heartbeat complete"
+fi
+
+if [[ -n "$SLACK_CLI_TOKEN" ]]; then
+  $BASEDIR/slack chat send --text ":white_check_mark: All backups complete!" --channel "$SLACK_CHANNEL" >/dev/null
 fi
