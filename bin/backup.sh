@@ -154,7 +154,7 @@ for APP in "${ADDR[@]}"; do # access each element of array
 
   echo "Backup of $APP complete"
   if [[ -n "$SLACK_CLI_TOKEN" ]]; then
-    $BASEDIR/slack chat send --text "Backup of `$APP` complete" --channel "$SLACK_CHANNEL" >/dev/null
+    $BASEDIR/slack chat send --text "Backup of *$APP* complete" --channel "$SLACK_CHANNEL" >/dev/null
   fi
 done
 
